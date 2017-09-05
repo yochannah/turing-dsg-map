@@ -58,7 +58,7 @@ var results = [],
 
 csv({
         headers: fieldDefinitions.computerNames,
-        includeColumns: ["locationId","localAuthority"],
+        includeColumns: ["locationId", "localAuthority"],
 
     })
     .fromFile(csvFilePath)
@@ -66,10 +66,32 @@ csv({
         // combine csv header row and csv line to a json object
         // jsonObj.a ==> 1 or 4
         if (jsonObj.localAuthority == "Cambridgeshire") {
-        results.push (jsonObj.locationId);
-      }
+            results.push(jsonObj.locationId);
+        }
     })
     .on('done', (error) => {
         //    console.log('end')
-        console.log(results);
-    })
+        //console.log(results);
+        fakeMonth([2014, 2015, 2016])
+    });
+var concernOrAlert = function() {
+    return (Math.random() > 0.5) ? "concern" : "alert";
+}
+
+var fakeMonth = function(years) {
+    var response = {};
+    years.map(function(year) {
+        response[year] = {};
+        for (var month = 1; month <= 12; month++) {
+            response[year][month] = {};
+            for (var i = 1; i <= 1000; i++) {
+                var id = Math.floor(Math.random() * 460),
+                    locationId = results[id];
+                response[year][month][locationId] = {
+                    "notificationType": concernOrAlert()
+                };
+            }
+        }
+    });
+    console.log(JSON.stringify(response));
+}
