@@ -1,3 +1,5 @@
+const csvFilePath = 'data/23_August_2017_CQC_directory.csv';
+
 var fieldDefinitions = {};
 fieldDefinitions.prettyNames = [
     "Name",
@@ -44,7 +46,7 @@ fieldDefinitions.ignore = [
     "providerId"
 ];
 
-const csvFilePath = 'data/23_August_2017_CQC_directory.csv'
+/** hopefully you won't need to edit anything below here **/
 const csv = require('csvtojson');
 
 var results = {},
