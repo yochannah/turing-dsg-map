@@ -1,0 +1,86 @@
+<!doctype html>
+<!--
+  Copyright 2016 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification visualisations</title>
+
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Homecare mapping">
+    <meta name="theme-color" content="#303F9F">
+    <link rel="shortcut icon" href="/location2.png">
+    <link rel="icon" href="/location2.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+
+    <!-- Tile icon for Win8 -->
+    <meta name="msapplication-TileColor" content="#3372DF">
+    <meta name="msapplication-navbutton-color" content="#303F9F">
+
+    <link rel="stylesheet" href="styles/main.css">
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <defs>
+            <symbol id="icon-compass2" viewBox="0 0 64 64">
+                <title>compass2</title>
+                <path class="path1" d="M32 0c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zM6 32c0-14.359 11.641-26 26-26 6.848 0 13.077 2.649 17.721 6.977l-25.721 11.023-11.023 25.721c-4.328-4.644-6.977-10.873-6.977-17.721zM36.573 36.573l-16.005 6.859 6.859-16.005 9.146 9.146zM32 58c-6.848 0-13.077-2.649-17.721-6.977l25.721-11.023 11.023-25.721c4.328 4.644 6.977 10.872 6.977 17.721 0 14.359-11.641 26-26 26z"></path>
+            </symbol>
+        </defs>
+    </svg>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+
+    <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+
+
+</head>
+
+<body>
+
+    <main>
+        <h1>Care home notifications</h1>
+        <div id="mapid"></div>
+        <div id="loader">Loading...</div>
+        <div id="status" class="inactive">Status: Currently showing 'Sheffield, UK'</div>
+        <div class="supplementary">
+            <form id="locationform">
+                <label for="searchFor">Search for a location:</label>
+                <input type="text" id="searchFor" placeholder="Stuck? Try Glasgow or Betws-y-coed" />
+                <button>Search</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <svg class="icon icon-compass2">
+            <use xlink:href="#icon-compass2"></use>
+        </svg>
+
+    </footer>
+
+    <script src="scripts/maps.js"></script>
+
+
+</body>
+
+</html>
