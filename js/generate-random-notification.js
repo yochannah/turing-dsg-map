@@ -70,7 +70,8 @@ csv({
     .on('done', (error) => {
         //    console.log('end')
         //console.log(results);
-        fakeMonth([2016])
+        //fakeMonth([2016])
+        tinyMockData([2017])
     });
 var concernOrAlert = function() {
     return (Math.random() > 0.5) ? "concern" : "alert";
@@ -84,6 +85,25 @@ var fakeMonth = function(years) {
         for (var month = 1; month <= 12; month++) {
             response[year][month] = {};
             for (var i = 1; i <= 1000; i++) {
+                var id = Math.floor(Math.random() * numOfResults),
+                    locationId = results[id];
+                response[year][month][locationId] = {
+                    "notificationType": concernOrAlert()
+                };
+            }
+        }
+    });
+    console.log(JSON.stringify(response));
+}
+
+var tinyMockData = function(years) {
+    var response = {},
+    numOfResults = results.length;
+    years.map(function(year) {
+        response[year] = {};
+        for (var month = 1; month <= 12; month++) {
+            response[year][month] = {};
+            for (var i = 1; i <= 10; i++) {
                 var id = Math.floor(Math.random() * numOfResults),
                     locationId = results[id];
                 response[year][month][locationId] = {
