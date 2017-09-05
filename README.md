@@ -1,3 +1,12 @@
+# Abandoned branch!!
+
+There is an API, no need to use the data loader!!!!! https://anypoint.mulesoft.com/apiplatform/openanswers-co-uk/#/portals/organizations/262a9203-e08f-4d1d-809d-2fc07032e8e8/apis/10878/versions/11228/pages/10961
+
+
+Ignore everything below.
+
++++++++++++++++
+
 # setup
 
 We assume you have node & npm installed. Get it here: https://nodejs.org/en/download/.
