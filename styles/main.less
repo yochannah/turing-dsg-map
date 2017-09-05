@@ -1,4 +1,4 @@
-//this file does not auto compile. 
+//this file does not auto compile.
 @cqcColor: #900b90;
 body,
 html {
@@ -14,7 +14,7 @@ body {
 main {
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: flex-start;
     align-items: center;
 }
@@ -22,9 +22,12 @@ a {
     text-decoration: underline;
     color: #039BE5;
 }
+.map {
+    flex-grow: 4;
+}
 #mapid {
-    height: 50vh;
-    width: 800px;
+    height: 80vh;
+    min-width: 50vw;
 }
 h1 {
     transition: all 0.5s;
@@ -129,7 +132,6 @@ footer {
 .supplementary {
     display: flex;
     padding: 1em;
-    max-height: 400px;
     justify-content: stretch;
 }
 .supplementary > * {

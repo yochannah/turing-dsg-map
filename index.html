@@ -57,12 +57,14 @@
 </head>
 
 <body>
+    <h1>Care home notifications</h1>
 
     <main>
-        <h1>Care home notifications</h1>
-        <div id="mapid"></div>
-        <div id="loader">Loading...</div>
-        <div id="status" class="inactive">Status: Currently showing 'Sheffield, UK'</div>
+        <div class="map">
+            <div id="mapid"></div>
+            <div id="loader">Loading...</div>
+            <div id="status" class="inactive">Status: Currently showing 'Sheffield, UK'</div>
+        </div>
         <div class="supplementary">
             <form id="locationform">
                 <label for="searchFor">Search for a location:</label>
@@ -79,6 +81,7 @@
 
     </footer>
 
+    <script src="js/map.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="js/tinymockdata.js"></script>
     <script src="js/main.js"></script>
