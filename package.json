@@ -1,0 +1,24 @@
+{
+  "name": "turing-dsg-map",
+  "version": "1.0.0",
+  "description": "care home mapping ",
+  "main": "index.js",
+  "dependencies": {
+    "csvtojson": "^1.1.7",
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yochannah/turing-dsg-map.git"
+  },
+  "author": "Yo Yehudi as part of Alan Turing Insitute Data Study Group September 2017",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/yochannah/turing-dsg-map/issues"
+  },
+  "homepage": "https://github.com/yochannah/turing-dsg-map#readme"
+}
