@@ -50,7 +50,7 @@ var fieldDefinitions = {
 
 /** hopefully you won't need to edit anything below here **/
 const csv = require('csvtojson');
-const https = require('https');
+const http = require('http');
 
 var results = {},
     types = [],
@@ -66,20 +66,35 @@ csv({
     .on('json', (jsonObj, index) => {
         // combine csv header row and csv line to a json object
         // jsonObj.a ==> 1 or 4
-        if(jsonObj.postcode) {
-          try {
-        var location = https.get(("https://api.postcodes.io/postcodes/" + jsonObj.postcode), (res, err) => {
-          console.log(res);
-          // results[jsonObj.locationId] = {
-          //   postcode : jsonObj.postcode,
-          //   lat : res.result.latitude,
-          //   lon : res.result.longititude
-          // };
-        });}
-        catch(e) {
-          console.log(e);
+        if (jsonObj.postcode) {
+            try {
+                var location = http.get(("http://178.62.43.80/postcodes/" + jsonObj.postcode), (res, err) => {
+                    res.setEncoding('utf8');
+                    let rawData = '';
+                    res.on('data', (chunk) => {
+                        rawData += chunk;
+                    });
+                    res.on('end', () => {
+                        try {
+                            const parsedData = JSON.parse(rawData);
+                            console.log(jsonObj.locationId, parsedData.result.latitude, parsedData.result.longitude);
+                            results[jsonObj.locationId] = {
+                                postcode: jsonObj.postcode
+                            };
+                            if (parsedData.result) {
+                                results[jsonObj.locationId].lat = parsedData.result.latitude,
+                                    results[jsonObj.locationId].lon = parsedData.result.longititude;
+                            }
+
+                        } catch (e) {
+                            console.error("ca", e.message);
+                        }
+                    });
+                });
+            } catch (e) {
+                console.log("sigh", e);
+            }
         }
-      }
     })
     .on('done', (error) => {
         //    console.log('end')
