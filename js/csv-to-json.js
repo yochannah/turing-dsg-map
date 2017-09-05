@@ -46,6 +46,10 @@ var fieldDefinitions = {
     ]
 };
 
+function splitServices(services) {
+return services.split("|");
+}
+
 /** hopefully you won't need to edit anything below here **/
 const csv = require('csvtojson');
 
@@ -56,7 +60,9 @@ var results = {},
 
 csv({
         headers: fieldDefinitions.computerNames,
-        ignoreColumns: fieldDefinitions.ignore
+        ignoreColumns: fieldDefinitions.ignore,
+        colParser : {"services" : splitServices}
+
     })
     .fromFile(csvFilePath)
     .on('json', (jsonObj, index) => {
