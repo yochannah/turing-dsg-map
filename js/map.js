@@ -16,8 +16,8 @@ colors= {
 function addMarker(marker, b) {
 //console.log(marker, markers);
     //assume array of objs with lats and longs and other fun stuff
-    var lat = marker.Latitude,
-        long = marker.Longitude,
+    var lat = marker.latitude,
+        long = marker.longitude,
         sev = marker.notification.notificationType,
         bounds = mymap.getBounds(),
         zoomLevel = mymap.getZoom();

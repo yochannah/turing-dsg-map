@@ -229,3 +229,11 @@ footer {
     font-size: 2em;
   }
 }
+.date {
+  display: flex;
+  border: solid 1px red;
+  justify-content: flex-end;
+}
+.date #currentYear {
+  margin-left: 1em;
+}

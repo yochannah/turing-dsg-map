@@ -4,12 +4,20 @@ var partnerCode = "ATIDSG";
 var careUrl = "https://crossorigin.me/https://api.cqc.org.uk/public/v1/locations",
     postcodeUrl = "https://api.postcodes.io/postcodes/"
 
+var loader = {
+    elem: document.getElementById('loader'),
+    show: function() {
+        loader.elem.setAttribute('class', '');
+    },
+    hide: function() {
+        loader.elem.setAttribute('class', 'inactive');
+    },
+}
 
 
 function Cqc() {
     var parent = this;
     this.getLocation = function(locationId) {
-      console.log(locationId);
         return $.ajax(careUrl + "/" + locationId + "?partnerCode=" + partnerCode, {
             'method': 'get'
         });
@@ -26,13 +34,26 @@ function Cqc() {
         return $.ajax(postcodeUrl + postcode, {
             'method': 'get'
         });
-    }
+    };
+    this.setTitle = function(details) {
+        var monthField = document.getElementById("currentMonth");
+        var monthName = new Date(details.year, (details.month - 1));
+        monthName = monthName.toLocaleString("en-gb", {
+            month: "long"
+        });
+        monthField.innerHTML = monthName;
+        var yearField = document.getElementById("currentYear");
+        yearField.innerHTML = details.year;
+    };
     this.showNotifications = function(details) {
-        var notifications = getNotifications(details);
-        notificationids = Object.keys(notifications);
+        this.setTitle(details);
+        var notifications = getNotifications(details),
+        notificationids = Object.keys(notifications),
+        notificationDeferreds = [];
         for (var i = 0; i < notificationids.length; i++) {
             // fetch details from api
             loc = parent.getLocation(notificationids[i]);
+            notificationDeferreds.push(loc);
             loc.done(function(response) {
                 var postcode = lookupPostcode(response.postalCode);
                 postcode.done(function(x) {
@@ -40,19 +61,21 @@ function Cqc() {
                     addMarker({
                         locationId: response.locationId,
                         notification: notifications[response.locationId],
-                        Latitude : x.result.latitude,
-                        Longitude : x.result.longitude
-                    } );
-                })
-            })
+                        latitude: x.result.latitude,
+                        longitude: x.result.longitude
+                    });
+                });
+            });
         }
+        $.when.apply($, notificationDeferreds).then(loader.hide);
     }
     return this;
 }
+
 
 var cqc = Cqc();
 
 cqc.showNotifications({
     year: 2017,
-    month: 07
+    month: 10
 });
