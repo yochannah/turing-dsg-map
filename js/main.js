@@ -58,6 +58,7 @@ function Cqc(timeToShow) {
     yearField.innerHTML = details.year;
   };
   this.showNotifications = function(details,monthsOffset) {
+    loader.show();
     if (monthsOffset === 0) {
       this.setTitle(details);
     }
@@ -101,13 +102,15 @@ function Cqc(timeToShow) {
       previous: function() {
         //time-1
         var now = parent.time.dec(parent.time.show, 1);
+        parent.setTitle(now);
+        this.showNotifications(now,0,"increment");
         //update map
         //sanity check & disable buttons if needed.
       },
       next: function() {
-      //  console.log("from", JSON.stringify(parent.time.show));
         var now = parent.time.inc(parent.time.show, 1);
-      //  console.log("to", JSON.stringify(parent.time.show));
+        parent.setTitle(now);
+        parent.showNotifications(now,0,"decrement");
       },
       timeSanityCheck: function() {
         //given the time now, do we need to disable buttons and/or stop moving?
