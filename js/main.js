@@ -2,7 +2,8 @@ var partnerCode = "ATIDSG";
 //crossorigin.me gets around the fact that the api headers don't allow CORS requests
 // :'(
 var careUrl = "https://crossorigin.me/https://api.cqc.org.uk/public/v1/locations",
-  postcodeUrl = "https://api.postcodes.io/postcodes/"
+  postcodeUrl = "https://api.postcodes.io/postcodes/",
+  map = xmap();
 
 var loader = {
   elem: document.getElementById('loader'),
@@ -73,7 +74,7 @@ function Cqc(timeToShow) {
         var postcode = lookupPostcode(response.postalCode);
         postcode.done(function(x) {
           // add marker to map
-          addMarker({
+          map.addMarker({
             locationId: response.locationId,
             notification: notifications[response.locationId],
             latitude: x.result.latitude,
@@ -103,14 +104,18 @@ function Cqc(timeToShow) {
         //time-1
         var now = parent.time.dec(parent.time.show, 1);
         parent.setTitle(now);
-        this.showNotifications(now,0,"increment");
+        map.shuffleMarkerGroups("decrement");
+        parent.showNotifications(now,0,"decrement");
+        map.adjustMarkerOpacity();
         //update map
         //sanity check & disable buttons if needed.
       },
       next: function() {
         var now = parent.time.inc(parent.time.show, 1);
         parent.setTitle(now);
-        parent.showNotifications(now,0,"decrement");
+        map.shuffleMarkerGroups("increment");
+        parent.showNotifications(now,0,"increment");
+        map.adjustMarkerOpacity()
       },
       timeSanityCheck: function() {
         //given the time now, do we need to disable buttons and/or stop moving?
@@ -175,5 +180,5 @@ function Cqc(timeToShow) {
 
 var cqc = Cqc({
   year: 2017,
-  month: 10
+  month: 3
 });
