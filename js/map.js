@@ -7,7 +7,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{
   accessToken: 'pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg'
 }).addTo(mymap);
 
-var markers = {},
+var markers = [{},{},{}],
   colors = {
     "DOLs" : "#8BC34A",
     "Abuse":"#2196F3",
@@ -17,7 +17,7 @@ var markers = {},
 
   };
 
-function addMarker(marker, b) {
+function addMarker(marker, groupIndex) {
   //console.log(marker, markers);
   //assume array of objs with lats and longs and other fun stuff
   var lat = marker.latitude,
@@ -33,10 +33,10 @@ function addMarker(marker, b) {
     color: colors[sev],
     weight: 1,
     opacity: marker.notification.number/10,
-    fillOpacity: marker.notification.number/10 + 0.3,
+    fillOpacity: marker.notification.number/10 + 0.3 - groupIndex/10,
     radius: (100000 / mymap.getZoom())
   }).addTo(mymap);
-  markers[marker.locationId] = circle;
+  markers[groupIndex][marker.locationId] = circle;
 }
 
 function removeMarker(marker, k) {

@@ -57,9 +57,11 @@ function Cqc(timeToShow) {
     var yearField = document.getElementById("currentYear");
     yearField.innerHTML = details.year;
   };
-  this.showNotifications = function(details) {
-    this.setTitle(details);
-    var notifications = getNotifications(details),
+  this.showNotifications = function(details,monthsOffset) {
+    if (monthsOffset === 0) {
+      this.setTitle(details);
+    }
+    var notifications = getNotifications(this.time.dec(details,monthsOffset)),
       notificationids = Object.keys(notifications),
       notificationDeferreds = [];
     for (var i = 0; i < notificationids.length; i++) {
@@ -75,7 +77,7 @@ function Cqc(timeToShow) {
             notification: notifications[response.locationId],
             latitude: x.result.latitude,
             longitude: x.result.longitude
-          });
+          },monthsOffset);
         });
       });
     }
@@ -98,13 +100,13 @@ function Cqc(timeToShow) {
       },
       previous: function() {
         //time-1
-        var now = parent.time.dec(parent.time.show);
+        var now = parent.time.dec(parent.time.show, 1);
         //update map
         //sanity check & disable buttons if needed.
       },
       next: function() {
       //  console.log("from", JSON.stringify(parent.time.show));
-        var now = parent.time.inc(parent.time.show);
+        var now = parent.time.inc(parent.time.show, 1);
       //  console.log("to", JSON.stringify(parent.time.show));
       },
       timeSanityCheck: function() {
@@ -126,23 +128,21 @@ function Cqc(timeToShow) {
         year: aDate.getFullYear()
       }
     },
-    inc : function(timeDetails) {
-      timeDetails.month = timeDetails.month +1;
-      //js date will automatically update to correct year if we
-      //overlap into new year (e.g. month 12 of 2017 will create a date
-      // that is jan 2018.)
+    //js date will automatically update to correct year if we
+    //overlap into new year (e.g. month 12 of 2017 will create a date
+    // that is jan 2018.)
+    inc : function(timeDetails, by) {
+      timeDetails.month = timeDetails.month + by;
       var theTime = this.toDate(timeDetails);
-      theTime = this.show = this.toMonthYear(theTime);
-      return theTime;
+      return this.toMonthYear(theTime);
     },
-    dec : function(timeDetails) {
-          timeDetails.month = timeDetails.month -1;
-          //js date will automatically update to correct year if we
-          //do negative month (e.g. month -1 of 2017 will create a date
-          // that is dec 2016.)
+    //js date will automatically update to correct year if we
+    //do negative month (e.g. month -1 of 2017 will create a date
+    // that is dec 2016.)
+    dec : function(timeDetails, by) {
+          timeDetails.month = timeDetails.month - by;
           var theTime = this.toDate(timeDetails);
-          theTime = this.show = this.toMonthYear(theTime);
-          return theTime;
+          return this.toMonthYear(theTime);
         },
   };
   this.initButtonListeners = function() {
@@ -155,10 +155,15 @@ function Cqc(timeToShow) {
     }
   };
   this.init = function(timeToShow) {
-    this.showNotifications(timeToShow);
+    this.showNotifications(timeToShow,0);
+    this.showNotifications(timeToShow,1);
+    this.showNotifications(timeToShow,2);
+
     this.initButtonListeners();
     this.notificationRange = this.getNotificationRange();
     this.time.show = timeToShow;
+
+
   };
   this.init(timeToShow);
   return this;
