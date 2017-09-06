@@ -14,32 +14,32 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notification visualisations</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification visualisations</title>
 
-    <!-- Disable tap highlight on IE -->
-    <meta name="msapplication-tap-highlight" content="no">
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
 
-    <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Homecare mapping">
-    <meta name="theme-color" content="#900b90">
-    <link rel="shortcut icon" href="/location2.png">
-    <link rel="icon" href="/location2.png">
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Homecare mapping">
+  <meta name="theme-color" content="#900b90">
+  <link rel="shortcut icon" href="/location2.png">
+  <link rel="icon" href="/location2.png">
 
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#900b90">
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#900b90">
 
-    <!-- Tile icon for Win8 -->
-    <meta name="msapplication-TileColor" content="#900b90">
-    <meta name="msapplication-navbutton-color" content="#900b90">
+  <!-- Tile icon for Win8 -->
+  <meta name="msapplication-TileColor" content="#900b90">
+  <meta name="msapplication-navbutton-color" content="#900b90">
 
-    <link rel="stylesheet" href="styles/main.css">
-    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <link rel="stylesheet" href="styles/main.css">
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
         <defs>
             <symbol id="icon-compass2" viewBox="0 0 64 64">
@@ -68,60 +68,61 @@
         </defs>
     </svg>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 
 
 </head>
 
 <body>
-    <header><h1>Care home notifications</h1></header>
+  <header>
+    <h1>Care home notifications</h1></header>
 
-    <main>
-        <div class="map">
-            <div id="mapid"></div>
-            <div id="loader">Loading...</div>
-            <div id="status" class="inactive">Status: Currently showing 'Sheffield, UK'</div>
-        </div>
-        <div class="supplementary">
-            <!--form id="locationform">
+  <main>
+    <div class="map">
+      <div id="mapid"></div>
+      <div id="loader">Loading...</div>
+      <div id="status" class="inactive">Status: Currently showing 'Sheffield, UK'</div>
+    </div>
+    <div class="supplementary">
+      <!--form id="locationform">
                 <label for="searchFor">Search for a location:</label>
                 <input type="text" id="searchFor" placeholder="Stuck? Try Glasgow or Betws-y-coed" />
                 <button>Search</button>
             </form-->
-                <div class="date">
-                    <div id="currentMonth"></div>
-                    <div id="currentYear"></div>
-                </div>
-                <div class="timeMachine">
-                    <svg class="icon icon-circle-left" id="controls-previous">
+      <div class="date">
+        <div id="currentMonth"></div>
+        <div id="currentYear"></div>
+      </div>
+      <div class="timeMachine">
+        <svg class="icon icon-circle-left" id="controls-previous">
                         <use xlink:href="#icon-circle-left"></use>
                     </svg>
-                    <svg class="icon icon-play" id="controls-play">
+        <svg class="icon icon-play" id="controls-play">
                         <use xlink:href="#icon-play"></use>
                     </svg>
-                    <svg class="icon icon-stop" id="controls-stop">
+        <svg class="icon icon-stop" id="controls-stop">
                         <use xlink:href="#icon-stop"></use>
                     </svg>
-                    <svg class="icon icon-circle-right" id="controls-next">
+        <svg class="icon icon-circle-right" id="controls-next">
                         <use xlink:href="#icon-circle-right"></use>
                     </svg>
-                </div>
-        </div>
-    </main>
-    <footer>
-        <svg class="icon icon-compass2">
+      </div>
+    </div>
+  </main>
+  <footer>
+    <svg class="icon icon-compass2">
             <use xlink:href="#icon-compass2"></use>
         </svg>
-        <p>Open data drawn from <a href="http://www.cqc.org.uk/about-us/transparency/using-cqc-data">CQC API</a>, licenced under <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">open government licence 3.0</a></p>
+    <p>Open data drawn from <a href="http://www.cqc.org.uk/about-us/transparency/using-cqc-data">CQC API</a>, licenced under <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">open government licence 3.0</a></p>
 
-    </footer>
+  </footer>
 
-    <script src="js/map.js"></script>
-    <script src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="js/tinymockdata.js"></script>
-    <script src="js/main.js"></script>
+  <script src="js/map.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="js/tinymockdata.js"></script>
+  <script src="js/main.js"></script>
 
 
 </body>
