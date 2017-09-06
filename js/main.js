@@ -105,7 +105,7 @@ function Cqc(timeToShow) {
         var now = parent.time.dec(parent.time.show, 1);
         parent.setTitle(now);
         map.shuffleMarkerGroups("decrement");
-        parent.showNotifications(now,0,"decrement");
+        parent.showNotifications(now,2,"decrement");
         map.adjustMarkerOpacity();
         //update map
         //sanity check & disable buttons if needed.
@@ -115,7 +115,7 @@ function Cqc(timeToShow) {
         parent.setTitle(now);
         map.shuffleMarkerGroups("increment");
         parent.showNotifications(now,0,"increment");
-        map.adjustMarkerOpacity()
+        map.adjustMarkerOpacity();
       },
       timeSanityCheck: function() {
         //given the time now, do we need to disable buttons and/or stop moving?

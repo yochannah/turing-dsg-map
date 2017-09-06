@@ -7,7 +7,7 @@ var xmap = function() {
     id: 'notsure',
     accessToken: 'pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg'
   }).addTo(mymap);
-  var markers = [{}, {}, {}],
+  this.markers = [{}, {}, {}],
     colors = {
       "DOLs": "#8BC34A",
       "Abuse": "#2196F3",
@@ -24,10 +24,7 @@ var xmap = function() {
       long = marker.longitude,
       sev = marker.notification.notificationType,
       bounds = mymap.getBounds(),
-      zoomLevel = mymap.getZoom();
-
-    //only add markers if they haven't already been added
-    //we don't want to waste resources adding markers we can't see anyway.
+      zoomLevel = mymap.getZoom(),
     circle = L.circle([lat, long], {
       fillColor: colors[sev],
       color: colors[sev],
