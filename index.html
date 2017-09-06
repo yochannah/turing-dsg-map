@@ -46,6 +46,25 @@
                 <title>compass2</title>
                 <path class="path1" d="M32 0c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zM6 32c0-14.359 11.641-26 26-26 6.848 0 13.077 2.649 17.721 6.977l-25.721 11.023-11.023 25.721c-4.328-4.644-6.977-10.873-6.977-17.721zM36.573 36.573l-16.005 6.859 6.859-16.005 9.146 9.146zM32 58c-6.848 0-13.077-2.649-17.721-6.977l25.721-11.023 11.023-25.721c4.328 4.644 6.977 10.872 6.977 17.721 0 14.359-11.641 26-26 26z"></path>
             </symbol>
+            <symbol id="icon-play" viewBox="0 0 32 32">
+                <title>play</title>
+                <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13zM12 9l12 7-12 7z"></path>
+            </symbol>
+            <symbol id="icon-stop" viewBox="0 0 32 32">
+                <title>stop</title>
+                <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13zM10 10h12v12h-12z"></path>
+            </symbol>
+            <symbol id="icon-circle-right" viewBox="0 0 32 32">
+                <title>circle-right</title>
+                <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13z"></path>
+                <path d="M11.086 22.086l2.829 2.829 8.914-8.914-8.914-8.914-2.828 2.828 6.086 6.086z"></path>
+            </symbol>
+            <symbol id="icon-circle-left" viewBox="0 0 32 32">
+                <title>circle-left</title>
+                <path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13z"></path>
+                <path d="M20.914 9.914l-2.829-2.829-8.914 8.914 8.914 8.914 2.828-2.828-6.086-6.086z"></path>
+            </symbol>
+
         </defs>
     </svg>
 
@@ -75,6 +94,20 @@
                 <div class="date">
                     <div id="currentMonth"></div>
                     <div id="currentYear"></div>
+                </div>
+                <div class="timeMachine">
+                    <svg class="icon icon-circle-left" id="controls-previous">
+                        <use xlink:href="#icon-circle-left"></use>
+                    </svg>
+                    <svg class="icon icon-play" id="controls-play">
+                        <use xlink:href="#icon-play"></use>
+                    </svg>
+                    <svg class="icon icon-stop" id="controls-stop">
+                        <use xlink:href="#icon-stop"></use>
+                    </svg>
+                    <svg class="icon icon-circle-right" id="controls-next">
+                        <use xlink:href="#icon-circle-right"></use>
+                    </svg>
                 </div>
             </div>
         </div>

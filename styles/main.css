@@ -231,9 +231,24 @@ footer {
 }
 .date {
   display: flex;
-  border: solid 1px red;
   justify-content: flex-end;
 }
 .date #currentYear {
   margin-left: 1em;
+}
+.timeMachine {
+  display: flex;
+}
+.timeMachine .icon {
+  width: 2em;
+  height: 2em;
+  margin: 0.5em;
+  color: #900b90;
+}
+.timeMachine .icon:hover {
+  cursor: pointer;
+  color: #bf0fbf;
+}
+.timeMachine .icon.icon-stop {
+  display: none;
 }
