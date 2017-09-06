@@ -17,6 +17,8 @@ var loader = {
 
 function Cqc(timeToShow) {
   var parent = this;
+  var file = tinyMockData;
+  this.notificationRange = {};
   this.getLocation = function(locationId) {
     return $.ajax(careUrl + "/" + locationId + "?partnerCode=" + partnerCode, {
       'method': 'get'
@@ -25,10 +27,20 @@ function Cqc(timeToShow) {
   this.getNotifications = function(details) {
     //if there is an api for notifications,
     //replace this method with the appropriate calls.
+    //may require updates to getNotificationRange too
+    return file[details.year][details.month];
 
-    return tinyMockData[details.year][details.month];
-    //this is for bigger-scale
-    //    return mockNotifications[details.year][details.month];
+  };
+  this.getNotificationRange = function(){
+    var first = {}, last = {},
+    years = Object.keys(file);
+    first.year = Math.min.apply(null,years);
+    last.year = Math.max.apply(null,years);
+    var firstMonths = Object.keys(file[first.year]);
+    first.month = Math.min.apply(null,firstMonths);
+    var lastMonths = Object.keys(file[last.year]);
+    last.month = Math.max.apply(null,lastMonths);
+    return {first:first,last:last};
   };
   this.lookupPostcode = function(postcode) {
     return $.ajax(postcodeUrl + postcode, {
@@ -85,11 +97,10 @@ function Cqc(timeToShow) {
         //hide stop button, stop moving through time, sanity
       },
       previous: function() {
-        //time-1, sanity
-        //the console logs are poor man's tests.
-      //  console.log("from", JSON.stringify(parent.time.show));
+        //time-1
         var now = parent.time.dec(parent.time.show);
-      //  console.log("from", JSON.stringify(parent.time.show));
+        //update map
+        //sanity check & disable buttons if needed.
       },
       next: function() {
       //  console.log("from", JSON.stringify(parent.time.show));
@@ -98,6 +109,9 @@ function Cqc(timeToShow) {
       },
       timeSanityCheck: function() {
         //given the time now, do we need to disable buttons and/or stop moving?
+        //is there a next month?
+        //is there a previous month?
+
       }
     }
   };
@@ -143,6 +157,7 @@ function Cqc(timeToShow) {
   this.init = function(timeToShow) {
     this.showNotifications(timeToShow);
     this.initButtonListeners();
+    this.notificationRange = this.getNotificationRange();
     this.time.show = timeToShow;
   };
   this.init(timeToShow);
