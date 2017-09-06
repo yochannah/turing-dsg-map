@@ -9,22 +9,28 @@ body {
   display: flex;
   flex-direction: column;
 }
+header {
+  text-align: center;
+}
 main {
   flex-grow: 1;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
 }
 a {
   text-decoration: underline;
   color: #039BE5;
 }
 .map {
-  flex-grow: 4;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 #mapid {
-  height: 80vh;
+  flex-grow: 1;
+  min-height: 20vh;
   min-width: 50vw;
 }
 h1 {
@@ -129,8 +135,9 @@ footer {
 }
 .supplementary {
   display: flex;
-  padding: 1em;
-  justify-content: stretch;
+  flex-direction: row;
+  padding: 0.5em;
+  justify-content: center;
 }
 .supplementary > * {
   min-width: 220px;
@@ -232,9 +239,10 @@ footer {
 .date {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 .date #currentYear {
-  margin-left: 1em;
+  margin-left: 0.5em;
 }
 .timeMachine {
   display: flex;
