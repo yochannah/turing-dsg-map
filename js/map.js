@@ -21,11 +21,18 @@ var xmap = function() {
 
 
   var heatMap = L.heatLayer([], {
-    radius: 20
+    radius: 20,
+    minOpacity:0.4,
+    gradient: {
+      0.6: "#ffeda0",
+      0.8: "#feb24c",
+      1: "#f03b20"
+    }
   }).addTo(mymap);
 
   this.heat = {
     addMarker: function(details) {
+      console.log(details[2]);
       heatMap.addLatLng(details);
     }
   }
@@ -50,11 +57,11 @@ var xmap = function() {
     }).addTo(markerLayerGroup).addTo(mymap);
     markers[groupIndex][marker.locationId] = circle;
     circle.properties = marker;
-    heat.addMarker([lat,long,opacity]);
+    heat.addMarker([lat, long, opacity]);
   }
 
   function calculateOpacity(notificationDetails, monthsOffset) {
-    return (notificationDetails.number / 10) + 0.3 - (monthsOffset / 10)
+    return (notificationDetails.number / 10) + 0.4 - (monthsOffset / 10)
   }
   this.shuffleMarkerGroups = function(incOrDec) {
     if (incOrDec === "increment") {
@@ -119,7 +126,7 @@ var xmap = function() {
     "markers": markerLayerGroup
   };
 
-  L.control.layers(baseLayers, overlays).addTo(mymap);
+  L.control.layers(baseLayers, overlays, {hideSingleBase : true}).addTo(mymap);
 
 
   return this;

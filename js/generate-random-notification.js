@@ -1,23 +1,9 @@
+//if you use a new csv dump file, edit this line to point to the file
 const csvFilePath = 'data/23_August_2017_CQC_directory.csv';
 
 var fieldDefinitions = {
-  prettyNames: [ //currently prettynames isn't used
-    "Name",
-    "Also known as",
-    "Address",
-    "Postcode",
-    "Phone number",
-    "Service's website (if available)",
-    "Service types",
-    "Date of latest check",
-    "Specialisms/services",
-    "Provider name",
-    "Local Authority",
-    "Region",
-    "Location URL",
-    "CQC Location (for office use only",
-    "CQC Provider ID (for office use only)"
-  ],
+  //these are used as column names for the csv parser
+  //it may need to be updated if the csv file is changed and has different columns
   computerNames: [
     "name",
     "aka",
@@ -37,6 +23,7 @@ var fieldDefinitions = {
   ],
 
   ignore: [
+    //these are ignored by the csv parser
     "aka",
     "address",
     "phone",
@@ -55,22 +42,17 @@ var results = [],
   types = [],
   services = [];
 
-
+//this section parses the csv file to json, allowing us to generate fake data from it
+//for purposes of visualising imaginary notifications
 csv({
     headers: fieldDefinitions.computerNames,
     includeColumns: ["locationId", "localAuthority"],
-
   })
   .fromFile(csvFilePath)
   .on('json', (jsonObj, index) => {
-    // combine csv header row and csv line to a json object
-    // jsonObj.a ==> 1 or 4
     results.push(jsonObj.locationId);
   })
   .on('done', (error) => {
-    //    console.log('end')
-    //console.log(results);
-    //fakeMonth([2016])
     fakeData([2016, 2017])
   });
 
@@ -81,14 +63,17 @@ var notificationTypes = ["DOLs",
   "Safeguarding"
 ];
 var notificationType = function() {
-  return notificationTypes[Math.round(Math.random() * 5)];
+  //there might be some boundary error here, because occasionally we generate
+  //data with no notification type. They come up as black circles on the map
+  return notificationTypes[Math.floor(Math.random() * 5)];
 }
 
 function randomIntFromInterval(min, max) {
   //thanks, SO: https://stackoverflow.com/questions/4959975xw
-  return Math.floor(Math.random() * (max - min) + min);
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+//nice little function to generate random counts for the
 var fakeCount = function() {
   var highOrLow = Math.random();
   if (highOrLow > 0.9) {
@@ -107,11 +92,10 @@ var fakeData = function(years) {
     numOfResults = results.length;
   years.map(function(year) {
     response[year] = {};
-    console.log(notificationType());
     //js dates are 0 based, so 6 is nooootttt June, it's July.
     for (var month = 0; month <= 11; month++) {
       response[year][month] = {};
-      for (var i = 1; i <= 10; i++) {
+      for (var i = 1; i <= 100; i++) {
         var id = Math.floor(Math.random() * numOfResults),
           locationId = results[id];
         response[year][month][locationId] = {
@@ -121,5 +105,5 @@ var fakeData = function(years) {
       }
     }
   });
-  console.log(JSON.stringify(response));
+  console.log("var tinyMockData = ",JSON.stringify(response));
 }
