@@ -7,127 +7,139 @@ var xmap = function() {
     id: 'notsure',
     accessToken: 'pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg'
   }).addTo(mymap);
-  this.markers = [{}, {}, {}],
-    colors = {
-      "DOLs": "#8BC34A",
-      "Abuse": "#2196F3",
-      "Injury": "#E91E63",
-      "Whistleblower": "#FFC107",
-      "Safeguarding": "#673AB7"
-    },
-    markersToRemove = null;
 
-  var markerLayerGroup = L.layerGroup();
+  var categoryMap = L.layerGroup()
+  //.addTo(mymap); // don't show the paintbull gun efect by default
 
 
   var heatMap = L.heatLayer([], {
     radius: 20,
-    minOpacity:0.4,
+    minOpacity: 0.4,
     gradient: {
-      0.6: "#ffeda0",
+      0.6: "#ffe800",
       0.8: "#feb24c",
       1: "#f03b20"
     }
   }).addTo(mymap);
 
   this.heat = {
-    addMarker: function(details) {
-      console.log(details[2]);
+    addMarker: function(details, groupIndex) {
+      //      console.log(details[2]);
       heatMap.addLatLng(details);
-    }
+      heat.markers[groupIndex].push(details);
+    },
+    markers: [
+      [],
+      [],
+      []
+    ]
   }
 
 
-  this.addMarker = function(marker, groupIndex) {
+  this.addMapPoint = function(marker, groupIndex) {
     //console.log(marker, markers);
-    //assume array of objs with lats and longs and other fun stuff
+    //assume array of objs with lats and lons and other fun stuff
     var lat = marker.latitude,
-      long = marker.longitude,
-      sev = marker.notification.notificationType,
-      bounds = mymap.getBounds(),
-      zoomLevel = mymap.getZoom(),
+      lon = marker.longitude,
       opacity = calculateOpacity(marker.notification, groupIndex);
-    circle = L.circle([lat, long], {
-      fillColor: colors[sev],
-      color: colors[sev],
-      weight: 1,
-      opacity: marker.notification.number / 10,
-      fillOpacity: opacity,
-      radius: (100000 / mymap.getZoom())
-    }).addTo(markerLayerGroup).addTo(mymap);
-    markers[groupIndex][marker.locationId] = circle;
-    circle.properties = marker;
-    heat.addMarker([lat, long, opacity]);
+    heat.addMarker([lat, lon, opacity], groupIndex);
+    category.addMarker(marker, groupIndex, lat, lon, opacity);
+  }
+
+  var category = {
+    markers: [{}, {}, {}],
+    colors: {
+      "DOLs": "#8BC34A",
+      "Abuse": "#2196F3",
+      "Injury": "#E91E63",
+      "Whistleblower": "#FFC107",
+      "Safeguarding": "#673AB7"
+    },
+    addMarker: function(marker, groupIndex, lat, lon, opacity) {
+      var sev = marker.notification.notificationType,
+        zoomLevel = mymap.getZoom(),
+        icon = new L.Marker.SVGMarker([lat, lon], {
+          iconOptions: {
+            fillColor: category.colors[sev],
+            color: category.colors[sev],
+            weight: 1,
+            opacity: marker.notification.number / 10,
+            fillOpacity: opacity,
+          }
+        }).addTo(categoryMap);
+      // circle = L.circle([lat, lon], {
+      //   fillColor: category.colors[sev],
+      //   color: category.colors[sev],
+      //   weight: 1,
+      //   opacity: marker.notification.number / 10,
+      //   fillOpacity: opacity,
+      //   radius: (100000 / mymap.getZoom())
+      // }).addTo(categoryMap);
+      category.markers[groupIndex][marker.locationId] = icon;
+      icon.properties = marker;
+    },
+    markersToRemove: null,
+    setMarkerOpacity: function(marker, monthsOffset) {
+      marker.setStyle({
+        fillOpacity: calculateOpacity(marker.properties.notification, monthsOffset)
+      });
+    },
+    removeAllMarkers: function(markerSet) {
+      for (marker in markerSet) {
+        mymap.removeLayer(markerSet[marker]);
+      }
+    }
   }
 
   function calculateOpacity(notificationDetails, monthsOffset) {
     return (notificationDetails.number / 10) + 0.4 - (monthsOffset / 10)
   }
   this.shuffleMarkerGroups = function(incOrDec) {
+    //forward in time
+    //one step closer to morlocks and eloi
     if (incOrDec === "increment") {
-      markers.unshift({}); //one step closer to morlocks and eloi
-      markersToRemove = markers.pop();
+      category.markers.unshift({});
+      category.markersToRemove = category.markers.pop();
+      //we just redraw the whole heatmap rather than removing markers
+      heat.markers.unshift([]);
+      heat.markers.pop();
     } else { //decrement, back in time for dinner
-      markers.push({});
-      markersToRemove = markers.shift();
+      category.markers.push({});
+      category.markersToRemove = category.markers.shift();
+      heat.markers.push([]);
+      heat.markers.shift();
     }
-    console.log(markersToRemove);
-    removeAllMarkers(markersToRemove);
-
-    markersToRemove = null;
+    //remove the old category markers
+    category.removeAllMarkers(category.markersToRemove);
+    category.markersToRemove = null;
+    //remove *all* heatmap markers and redraw (doesn't have a remove-individual-marker method)
+    var allHeats = heat.markers[0].concat(heat.markers[1]).concat(heat.markers[2]);
+    heatMap.setLatLngs(allHeats);
   };
 
-  function setMarkerOpacity(marker, monthsOffset) {
-    marker.setStyle({
-      fillOpacity: calculateOpacity(marker.properties.notification, monthsOffset)
-    });
-  };
+
 
   this.adjustMarkerOpacity = function() {
-    markers.map(function(markerSet, i) {
+    category.markers.map(function(markerSet, i) {
       for (marker in markerSet) {
-        setMarkerOpacity(markerSet[marker], i);
+        category.setMarkerOpacity(markerSet[marker], i);
       };
     })
   }
 
-
-  function removeAllMarkers(markerSet) {
-    for (marker in markerSet) {
-      mymap.removeLayer(markerSet[marker]);
-    }
-  }
-
-  function getBounds() {
-    var b = mymap.getBounds();
-    return {
-      startAt: b._southWest.lat,
-      endAt: b._northEast.lat,
-      bucket: mymap.getCenter().lng.toString().split(".")[0]
-    }
-  }
-
-  function centerMap(lat, long, zoomin) {
-    mymap.panTo([lat, long]);
-    if (zoomin) {
-      mymap.setZoom(14);
-    } else {
-      mymap.setZoom(12);
-
-    }
-  }
-
-
+  //create list of layers on map
   var baseLayers = {
-    "Mapbox": tiles,
-  };
-  var overlays = {
-    "heat": heatMap,
-    "markers": markerLayerGroup
-  };
+      "Mapbox": tiles,
+    },
+    overlays = {
+      "Heatmap": heatMap,
+      "Notification Categories": categoryMap
+    };
 
-  L.control.layers(baseLayers, overlays, {hideSingleBase : true}).addTo(mymap);
-
+  //add to the map
+  L.control.layers(baseLayers, overlays, {
+    hideSingleBase: true
+  }).addTo(mymap);
 
   return this;
 };

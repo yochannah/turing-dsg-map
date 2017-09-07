@@ -74,7 +74,7 @@ function Cqc(timeToShow) {
         var postcode = lookupPostcode(response.postalCode);
         postcode.done(function(x) {
           // add marker to map
-          map.addMarker({
+          map.addMapPoint({
             locationId: response.locationId,
             notification: notifications[response.locationId],
             latitude: x.result.latitude,
