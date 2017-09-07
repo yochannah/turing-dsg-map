@@ -1,9 +1,9 @@
 var xmap = function() {
-  var mymap = L.map('mapid').setView([53.382121, -1.467878], 1);
-  L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg', {
+  var mymap = L.map('mapid').setView([53.382121, -1.467878], 5);
+  var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18,
-    minZoom: 6,
+    maxZoom: 28,
+    minZoom: 1,
     id: 'notsure',
     accessToken: 'pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg'
   }).addTo(mymap);
@@ -17,6 +17,20 @@ var xmap = function() {
     },
     markersToRemove = null;
 
+  var markerLayerGroup = L.layerGroup();
+
+
+  var heatMap = L.heatLayer([], {
+    radius: 20
+  }).addTo(mymap);
+
+  this.heat = {
+    addMarker: function(details) {
+      heatMap.addLatLng(details);
+    }
+  }
+
+
   this.addMarker = function(marker, groupIndex) {
     //console.log(marker, markers);
     //assume array of objs with lats and longs and other fun stuff
@@ -25,16 +39,18 @@ var xmap = function() {
       sev = marker.notification.notificationType,
       bounds = mymap.getBounds(),
       zoomLevel = mymap.getZoom(),
+      opacity = calculateOpacity(marker.notification, groupIndex);
     circle = L.circle([lat, long], {
       fillColor: colors[sev],
       color: colors[sev],
       weight: 1,
       opacity: marker.notification.number / 10,
-      fillOpacity: calculateOpacity(marker.notification, groupIndex),
+      fillOpacity: opacity,
       radius: (100000 / mymap.getZoom())
-    }).addTo(mymap);
+    }).addTo(markerLayerGroup).addTo(mymap);
     markers[groupIndex][marker.locationId] = circle;
     circle.properties = marker;
+    heat.addMarker([lat,long,opacity]);
   }
 
   function calculateOpacity(notificationDetails, monthsOffset) {
@@ -93,5 +109,18 @@ var xmap = function() {
 
     }
   }
+
+
+  var baseLayers = {
+    "Mapbox": tiles,
+  };
+  var overlays = {
+    "heat": heatMap,
+    "markers": markerLayerGroup
+  };
+
+  L.control.layers(baseLayers, overlays).addTo(mymap);
+
+
   return this;
 };
