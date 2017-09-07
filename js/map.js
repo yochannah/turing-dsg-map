@@ -67,14 +67,6 @@ var xmap = function() {
             fillOpacity: opacity,
           }
         }).addTo(categoryMap);
-      // circle = L.circle([lat, lon], {
-      //   fillColor: category.colors[sev],
-      //   color: category.colors[sev],
-      //   weight: 1,
-      //   opacity: marker.notification.number / 10,
-      //   fillOpacity: opacity,
-      //   radius: (100000 / mymap.getZoom())
-      // }).addTo(categoryMap);
       category.markers[groupIndex][marker.locationId] = icon;
       icon.properties = marker;
     },

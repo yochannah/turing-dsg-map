@@ -1,7 +1,8 @@
 var partnerCode = "ATIDSG";
 //crossorigin.me gets around the fact that the api headers don't allow CORS requests
 // :'(
-var careUrl = "https://crossorigin.me/https://api.cqc.org.uk/public/v1/locations",
+var corsProxy = "https://crossorigin.me/",
+  careUrl = corsProxy + "https://api.cqc.org.uk/public/v1/locations",
   postcodeUrl = "https://api.postcodes.io/postcodes/",
   map = xmap();
 
@@ -83,7 +84,10 @@ function Cqc(timeToShow) {
         });
       });
     }
-    $.when.apply($, notificationDeferreds).then(loader.hide);
+    $.when.apply($, notificationDeferreds).then(loader.hide, function(failure){
+      loader.hide();
+      document.getElementById("status").innerHTML = "Some points failed to load. <a href='limitations.html'>Here's why</a>";
+    });
   };
   this.buttons = {
     elems: {

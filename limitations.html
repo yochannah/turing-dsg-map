@@ -79,37 +79,13 @@
   <header>
     <h1>Care home notifications</h1></header>
 
-  <main>
-    <div class="map">
-      <div id="mapid"></div>
-      <div id="loader">Loading...</div>
-      <div id="status" class="active"></div>
-    </div>
-    <div class="supplementary">
-      <!--form id="locationform">
-                <label for="searchFor">Search for a location:</label>
-                <input type="text" id="searchFor" placeholder="Stuck? Try Glasgow or Betws-y-coed" />
-                <button>Search</button>
-            </form-->
-      <div class="date">
-        <div id="currentMonth"></div>
-        <div id="currentYear"></div>
-      </div>
-      <div class="timeMachine">
-        <svg class="icon icon-circle-left" id="controls-previous">
-                        <use xlink:href="#icon-circle-left"></use>
-                    </svg>
-        <svg class="icon icon-play" id="controls-play">
-                        <use xlink:href="#icon-play"></use>
-                    </svg>
-        <svg class="icon icon-stop" id="controls-stop">
-                        <use xlink:href="#icon-stop"></use>
-                    </svg>
-        <svg class="icon icon-circle-right" id="controls-next">
-                        <use xlink:href="#icon-circle-right"></use>
-                    </svg>
-      </div>
-    </div>
+  <main class="faq">
+      <h2>Why does the map show me an error saying some points failed to load?</h2>
+    <p>This probably occurred because we are using a free proxy service called <a href="https://crossorigin.me/">crossorigin.me</a> to circumvent the fact that the CQC API doesn't seem to be sending CORS headers in their responses. This services is rate-limited to no more than three responses per second, and could be liable to go down completely without notice given that it's a free service with no guarantees of support or uptime. </p>
+
+    <h3>Can I do anything about this? </h3>
+    <p>Sure. Assuming you aren't making queries from the same domain as the CQC API and you don't have access to add the correct headers to the CQC API yourself, google "CORS proxy", set a CORS proxy up (if you hve npm, this should be as simple as an npm install command), and change the <code>corsProxy</code> variable in <code>js/main.js</code> to point to the URL of your own proxy. </p>
+    <a href="index.html">Take me back to the lovely map</a>
   </main>
   <footer>
     <svg class="icon icon-compass2">
@@ -118,14 +94,6 @@
     <p>Open data drawn from <a href="http://www.cqc.org.uk/about-us/transparency/using-cqc-data">CQC API</a>, licenced under <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">open government licence 3.0</a></p>
 
   </footer>
-<script src="leaflet-svgicon/svg-icon.js"></script>
-  <script src="node_modules/leaflet.heat/dist/leaflet-heat.js"></script>
-  <script src="js/map.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="js/tinymockdata.js"></script>
-  <script src="js/main.js"></script>
-
-
 
 </body>
 
