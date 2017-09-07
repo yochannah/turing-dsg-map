@@ -86,7 +86,7 @@ var notificationType = function() {
 
 function randomIntFromInterval(min, max) {
   //thanks, SO: https://stackoverflow.com/questions/4959975xw
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  return Math.floor(Math.random() * (max - min) + min);
 }
 
 var fakeCount = function() {
