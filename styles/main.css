@@ -257,6 +257,10 @@ footer {
   cursor: pointer;
   color: #bf0fbf;
 }
+.timeMachine .icon.inactive {
+  color: #666;
+  cursor: default;
+}
 .timeMachine .icon.icon-stop {
   display: none;
 }

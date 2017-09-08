@@ -1,0 +1,1 @@
+this folder contains copies of js files from node_modules and leaflet svgicon to allow the demo to work on gh-pages without requiring a build process

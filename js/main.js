@@ -33,16 +33,20 @@ function Cqc(timeToShow) {
     return file[details.year][details.month];
 
   };
-  this.getNotificationRange = function(){
-    var first = {}, last = {},
-    years = Object.keys(file);
-    first.year = Math.min.apply(null,years);
-    last.year = Math.max.apply(null,years);
+  this.getNotificationRange = function() {
+    var first = {},
+      last = {},
+      years = Object.keys(file);
+    first.year = Math.min.apply(null, years);
+    last.year = Math.max.apply(null, years);
     var firstMonths = Object.keys(file[first.year]);
-    first.month = Math.min.apply(null,firstMonths);
+    first.month = Math.min.apply(null, firstMonths);
     var lastMonths = Object.keys(file[last.year]);
-    last.month = Math.max.apply(null,lastMonths);
-    return {first:first,last:last};
+    last.month = Math.max.apply(null, lastMonths);
+    return {
+      first: first,
+      last: last
+    };
   };
   this.lookupPostcode = function(postcode) {
     return $.ajax(postcodeUrl + postcode, {
@@ -51,7 +55,7 @@ function Cqc(timeToShow) {
   };
   this.setTitle = function(details) {
     var monthField = document.getElementById("currentMonth");
-    var monthName = new Date(details.year, (details.month - 1));
+    var monthName = new Date(details.year, details.month);
     monthName = monthName.toLocaleString("en-gb", {
       month: "long"
     });
@@ -59,14 +63,16 @@ function Cqc(timeToShow) {
     var yearField = document.getElementById("currentYear");
     yearField.innerHTML = details.year;
   };
-  this.showNotifications = function(details,monthsOffset) {
+  this.showNotifications = function(details, monthsOffset) {
     loader.show();
     if (monthsOffset === 0) {
       this.setTitle(details);
     }
-    var notifications = getNotifications(this.time.dec(details,monthsOffset)),
-      notificationids = Object.keys(notifications),
+
+    var notificationsToShow = getNotifications(this.time.dec(details, monthsOffset)),
+      notificationids = Object.keys(notificationsToShow),
       notificationDeferreds = [];
+
     for (var i = 0; i < notificationids.length; i++) {
       // fetch details from api
       loc = parent.getLocation(notificationids[i]);
@@ -77,14 +83,14 @@ function Cqc(timeToShow) {
           // add marker to map
           map.addMapPoint({
             locationId: response.locationId,
-            notification: notifications[response.locationId],
+            notification: notificationsToShow[response.locationId],
             latitude: x.result.latitude,
             longitude: x.result.longitude
-          },monthsOffset);
+          }, monthsOffset);
         });
       });
     }
-    $.when.apply($, notificationDeferreds).then(loader.hide, function(failure){
+    $.when.apply($, notificationDeferreds).then(loader.hide, function(failure) {
       loader.hide();
       document.getElementById("status").innerHTML = "Some points failed to load. <a href='limitations.html'>Here's why</a>";
     });
@@ -97,40 +103,61 @@ function Cqc(timeToShow) {
       previous: document.getElementById('controls-previous')
     },
     behaviour: {
-      play: function() {
+      play: function(e) {
         //hide play button, next, sanity
         console.log('clicked');
       },
       stop: function() {
         //hide stop button, stop moving through time, sanity
       },
-      previous: function() {
+      previous: function(e) {
         //time-1
-        var now = parent.time.dec(parent.time.show, 1);
-        parent.setTitle(now);
-        map.shuffleMarkerGroups("decrement");
-        parent.showNotifications(now,2,"decrement");
-        map.adjustMarkerOpacity();
-        //update map
-        //sanity check & disable buttons if needed.
+        if (!$(e.target).hasClass("inactive")) {
+
+          var now = parent.time.dec(parent.time.getTime(), 1);
+          parent.setTitle(now);
+          //update map
+          map.shuffleMarkerGroups("decrement");
+          parent.showNotifications(now, 2, "decrement");
+          map.adjustMarkerOpacity();
+          //sanity check & disable buttons if needed.
+          buttons.behaviour.timeSanityCheck(now);
+        }
       },
-      next: function() {
-        var now = parent.time.inc(parent.time.show, 1);
-        parent.setTitle(now);
-        map.shuffleMarkerGroups("increment");
-        parent.showNotifications(now,0,"increment");
-        map.adjustMarkerOpacity();
+      next: function(e) {
+        if (!$(e.target).hasClass("inactive")) {
+          var now = parent.time.inc(parent.time.getTime(), 1);
+          parent.setTitle(now);
+          map.shuffleMarkerGroups("increment");
+          parent.showNotifications(now, 0, "increment");
+          map.adjustMarkerOpacity();
+          buttons.behaviour.timeSanityCheck(now);
+        }
       },
-      timeSanityCheck: function() {
+      timeSanityCheck: function(aTime) {
         //given the time now, do we need to disable buttons and/or stop moving?
         //is there a next month?
         //is there a previous month?
-
+        if (time.equals(aTime, notificationRange.first)) {
+          $(buttons.elems.previous).addClass("inactive");
+        } else {
+          $(buttons.elems.next).removeClass("inactive");
+          $(buttons.elems.previous).removeClass("inactive");
+          if (time.equals(aTime, notificationRange.last)) {
+            $(buttons.elems.next).addClass("inactive");
+          }
+        }
       }
     }
   };
   this.time = {
-    show: {},
+    _time: {},
+    getTime: function(){
+      return this._time;
+    },
+    setTime : function(aTime){
+      this._time = aTime;
+    },
     toDate: function(timeDetails) {
       return new Date(timeDetails.year, timeDetails.month);
     },
@@ -140,10 +167,13 @@ function Cqc(timeToShow) {
         year: aDate.getFullYear()
       }
     },
+    equals: function(time1, time2) {
+      return (time1.month === time2.month) && (time1.year === time2.year);
+    },
     //js date will automatically update to correct year if we
     //overlap into new year (e.g. month 12 of 2017 will create a date
     // that is jan 2018.)
-    inc : function(timeDetails, by) {
+    inc: function(timeDetails, by) {
       timeDetails.month = timeDetails.month + by;
       var theTime = this.toDate(timeDetails);
       return this.toMonthYear(theTime);
@@ -151,11 +181,11 @@ function Cqc(timeToShow) {
     //js date will automatically update to correct year if we
     //do negative month (e.g. month -1 of 2017 will create a date
     // that is dec 2016.)
-    dec : function(timeDetails, by) {
-          timeDetails.month = timeDetails.month - by;
-          var theTime = this.toDate(timeDetails);
-          return this.toMonthYear(theTime);
-        },
+    dec: function(timeDetails, by) {
+      timeDetails.month = timeDetails.month - by;
+      var theTime = this.toDate(timeDetails);
+      return this.toMonthYear(theTime);
+    },
   };
   this.initButtonListeners = function() {
     var buttonList = this.buttons.elems,
@@ -166,15 +196,19 @@ function Cqc(timeToShow) {
       $(button).click(buttonBehaviour[buttonName]);
     }
   };
-  this.init = function(timeToShow) {
-    this.showNotifications(timeToShow,0);
-    this.showNotifications(timeToShow,1);
-    this.showNotifications(timeToShow,2);
+  this.init = function() {
+    this.time.setTime(timeToShow);
+  //  console.log("a", JSON.stringify(this.time.getTime()));
 
+    this.showNotifications(this.time.getTime(), 0);
+  //  console.log("b", JSON.stringify(this.time.getTime()));
+    this.showNotifications(this.time.getTime(), 1);
+  //  console.log("c", JSON.stringify(this.time.getTime()));
+    this.showNotifications(this.time.getTime(), 2);
+  //  console.log("d", JSON.stringify(this.time.getTime()));
     this.initButtonListeners();
     this.notificationRange = this.getNotificationRange();
-    this.time.show = timeToShow;
-
+  //  console.log("init complete", JSON.stringify(this.time.getTime()));
 
   };
   this.init(timeToShow);
@@ -184,5 +218,5 @@ function Cqc(timeToShow) {
 
 var cqc = Cqc({
   year: 2017,
-  month: 3
+  month: 7
 });
