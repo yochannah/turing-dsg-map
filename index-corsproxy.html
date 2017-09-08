@@ -1,0 +1,127 @@
+<!doctype html>
+<!--
+  Copyright 2016 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification visualisations</title>
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Homecare mapping">
+  <meta name="theme-color" content="#900b90">
+  <link rel="shortcut icon" href="/location2.png">
+  <link rel="icon" href="/location2.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#900b90">
+
+  <!-- Tile icon for Win8 -->
+  <meta name="msapplication-TileColor" content="#900b90">
+  <meta name="msapplication-navbutton-color" content="#900b90">
+
+  <link rel="stylesheet" href="styles/main.css">
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <defs>
+            <symbol id="icon-compass2" viewBox="0 0 64 64">
+                <title>compass2</title>
+                <path class="path1" d="M32 0c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zM6 32c0-14.359 11.641-26 26-26 6.848 0 13.077 2.649 17.721 6.977l-25.721 11.023-11.023 25.721c-4.328-4.644-6.977-10.873-6.977-17.721zM36.573 36.573l-16.005 6.859 6.859-16.005 9.146 9.146zM32 58c-6.848 0-13.077-2.649-17.721-6.977l25.721-11.023 11.023-25.721c4.328 4.644 6.977 10.872 6.977 17.721 0 14.359-11.641 26-26 26z"></path>
+            </symbol>
+            <symbol id="icon-play" viewBox="0 0 32 32">
+                <title>play</title>
+                <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13zM12 9l12 7-12 7z"></path>
+            </symbol>
+            <symbol id="icon-stop" viewBox="0 0 32 32">
+                <title>stop</title>
+                <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13zM10 10h12v12h-12z"></path>
+            </symbol>
+            <symbol id="icon-circle-right" viewBox="0 0 32 32">
+                <title>circle-right</title>
+                <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13z"></path>
+                <path d="M11.086 22.086l2.829 2.829 8.914-8.914-8.914-8.914-2.828 2.828 6.086 6.086z"></path>
+            </symbol>
+            <symbol id="icon-circle-left" viewBox="0 0 32 32">
+                <title>circle-left</title>
+                <path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13z"></path>
+                <path d="M20.914 9.914l-2.829-2.829-8.914 8.914 8.914 8.914 2.828-2.828-6.086-6.086z"></path>
+            </symbol>
+
+        </defs>
+    </svg>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+
+  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+
+
+</head>
+
+<body>
+  <header>
+    <h1>Care home notifications</h1></header>
+
+  <main>
+    <div class="map">
+      <div id="mapid"></div>
+      <div id="loader">Loading...</div>
+      <div id="status" class="active"></div>
+    </div>
+    <div class="supplementary">
+      <div class="date">
+        <div id="currentMonth"></div>
+        <div id="currentYear"></div>
+      </div>
+      <div class="timeMachine">
+        <svg class="icon icon-circle-left" id="controls-previous">
+                        <use xlink:href="#icon-circle-left"></use>
+                    </svg>
+        <!--svg class="icon icon-play" id="controls-play">
+                        <use xlink:href="#icon-play"></use>
+                    </svg>-->
+        <svg class="icon icon-stop" id="controls-stop">
+                        <use xlink:href="#icon-stop"></use>
+                    </svg>
+        <svg class="icon icon-circle-right" id="controls-next">
+                        <use xlink:href="#icon-circle-right"></use>
+                    </svg>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <svg class="icon icon-compass2">
+            <use xlink:href="#icon-compass2"></use>
+        </svg>
+    <p>Open data drawn from <a href="http://www.cqc.org.uk/about-us/transparency/using-cqc-data">CQC API</a>, licenced under <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">open government licence 3.0</a></p>
+
+  </footer>
+<script src="js/vendor/svg-icon.js"></script>
+  <script src="js/vendor/leaflet-heat.js"></script>
+  <script src="js/map.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="js/tinymockdata.js"></script>
+  <script src="js/main-corsproxy.js"></script>
+
+
+
+</body>
+
+</html>

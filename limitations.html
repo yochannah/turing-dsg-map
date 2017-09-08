@@ -81,11 +81,13 @@
 
   <main class="faq">
       <h2>Why does the map show me an error saying some points failed to load?</h2>
-    <p>This probably occurred because we are using a free proxy service called <a href="https://crossorigin.me/">crossorigin.me</a> to circumvent the fact that the CQC API doesn't seem to be sending CORS headers in their responses. This services is rate-limited to no more than three responses per second, and could be liable to go down completely without notice given that it's a free service with no guarantees of support or uptime. </p>
+    <p>This probably occurred because we are using free proxy services called <a href="https://crossorigin.me/">crossorigin.me</a> and <a href="http://cors-proxy.htmldriven.com/">CORS proxy by HTMLDriven</a> to circumvent the fact that the CQC API doesn't seem to be sending CORS headers in their responses.</p>
+      <p>The <a href="index.html">map version powered by Crossorigin.me</a> is rate-limited to no more than three responses per second, and could be liable to go down completely without notice given that it's a free service with no guarantees of support or uptime. </p>
+      <p><a href="index-corsproxy.html">The map powered by CORS proxy by HTMLDriven</a> is slower but returns results more reliably.
+      </p>
 
     <h3>Can I do anything about this? </h3>
-    <p>Sure. Assuming you aren't making queries from the same domain as the CQC API and you don't have access to add the correct headers to the CQC API yourself, google "CORS proxy", set a CORS proxy up (if you hve npm, this should be as simple as an npm install command), and change the <code>corsProxy</code> variable in <code>js/main.js</code> to point to the URL of your own proxy. </p>
-    <a href="index.html">Take me back to the lovely map</a>
+    <p>Sure. Assuming you aren't making queries from the same domain as the CQC API and you don't have access to add the correct headers to the CQC API yourself, google "CORS proxy", set a CORS proxy up (if you hve npm, this should be as simple as an npm install command), and change the <code>corsProxy</code> variable in <code>js/main-crossoriginme.js</code> to point to the URL of your own proxy. </p>
   </main>
   <footer>
     <svg class="icon icon-compass2">
